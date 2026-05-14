@@ -1,0 +1,16 @@
+{
+  "rainfall_mm": [
+    50,
+    100,
+    150,
+    200,
+    250
+  ],
+  "default": 100,
+  "unit": "mm",
+  "model": "real_data_v1_osm_open_meteo",
+  "sources": [
+    "OpenStreetMap via Overpass API",
+    "Open-Meteo Elevation API / Copernicus DEM GLO-90"
+  ]
+}

@@ -1,0 +1,46 @@
+rainfall_scenarios_mm:
+  - 50
+  - 100
+  - 150
+  - 200
+  - 250
+
+risk_classes:
+  very_low:
+    min: 0
+    max: 20
+  low:
+    min: 20
+    max: 40
+  moderate:
+    min: 40
+    max: 60
+  high:
+    min: 60
+    max: 80
+  severe:
+    min: 80
+    max: 100
+
+weights:
+  base_hazard:
+    twi_score: 0.35
+    water_proximity_score: 0.20
+    drain_capacity_inverse: 0.20
+    impervious_score: 0.15
+    flow_accumulation_score: 0.10
+  scenario:
+    base_hazard: 0.60
+    runoff_accumulation_score: 0.40
+  final:
+    scenario_hazard: 0.75
+    population_exposure_score: 0.25
+
+curve_number:
+  water: 100
+  dense_urban: 92
+  urban: 85
+  open_space: 74
+  vegetation: 61
+  unknown: 80
+

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bangalore Flood Risk Simulator</title>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section id="map" aria-label="Flood risk map"></section>
+
+      <header class="topbar">
+        <div class="topbar-copy">
+          <p class="eyebrow">Bangalore Flood Risk Simulator</p>
+          <h1>Gridwise Flood Risk x Rainfall Map</h1>
+          <p class="source-line formula-line" id="sourceLine">
+            Risk = 100[0.75(0.60(0.35TWI + 0.20Water + 0.20DrainInv + 0.15Imperv + 0.10Flow) + 0.40(0.45Runoff + 0.35Flow + 0.20Rain)) + 0.25Exposure]
+          </p>
+        </div>
+        <div class="scenario-readout">
+          <span id="rainfallValue">100</span>
+          <span>mm</span>
+        </div>
+      </header>
+
+      <section class="control-panel" aria-label="Scenario controls">
+        <div class="slider-row">
+          <label for="rainfallSlider">Rainfall</label>
+          <input id="rainfallSlider" type="range" min="0" max="4" step="1" value="1">
+        </div>
+        <div class="ticks" aria-hidden="true">
+          <span>50</span>
+          <span>100</span>
+          <span>150</span>
+          <span>200</span>
+          <span>250</span>
+        </div>
+        <div class="toggles">
+          <button class="toggle is-active" id="riskToggle" type="button">Risk</button>
+          <button class="toggle" id="waterToggle" type="button">Water</button>
+        </div>
+      </section>
+
+      <aside class="inspector" aria-live="polite">
+        <div class="inspector-heading">
+          <p class="eyebrow">Selected area</p>
+          <h2 id="areaName">Click a cell</h2>
+        </div>
+        <div class="score-block">
+          <span id="riskScore">--</span>
+          <p id="riskClass">Risk score</p>
+        </div>
+        <dl class="metrics" id="metrics"></dl>
+      </aside>
+
+      <section class="legend" aria-label="Risk legend">
+        <div><span class="swatch very-low"></span>Very low</div>
+        <div><span class="swatch low"></span>Low</div>
+        <div><span class="swatch moderate"></span>Moderate</div>
+        <div><span class="swatch high"></span>High</div>
+        <div><span class="swatch severe"></span>Severe</div>
+      </section>
+
+      <div class="metric-tooltip" id="metricTooltip" role="tooltip"></div>
+    </main>
+
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script src="/main.js"></script>
+  </body>
+</html>
