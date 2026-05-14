@@ -1,19 +1,151 @@
-Overview of what's being visualised in the map/UI:
+# Bangalore Flood Risk Simulator
 
-**Data Scope**
-- Map grid: Bangalore is split into 224 grid cells in scripts/build_real_scenarios.py.
+An interactive geospatial flood-risk simulation platform for Bangalore that combines real elevation data, hydrological approximations, OpenStreetMap infrastructure features, and rainfall-driven runoff modelling to estimate urban flood vulnerability across the city.
 
-**Individual things we calculate to get the final risk score**
-- Elevation: Each cell gets a real elevation sample from Open-Meteo’s Elevation API, backed by Copernicus DEM GLO-90.
-- OSM water data: Water bodies and waterways/drains are fetched from OpenStreetMap through Overpass API.
-- OSM roads: Road features are fetched from OpenStreetMap and used as a proxy for urbanization/imperviousness and exposure.
-- TWI-like score: Estimated from relative elevation, local flatness, and whether nearby cells are lower. It is an approximation, not full raster TWI yet.
-- Water proximity score: Higher if a cell is closer to lakes, water bodies, streams, canals, or drains.
-- Drain inverse score: Higher risk when mapped drains/canals/ditches are farther away or road density is high.
-- Imperviousness score: Currently estimated mostly from OSM road density. Building density is optional but off by default.
-- Runoff score: Uses the SCS-CN formula. Curve number is estimated from imperviousness and water proximity.
-- Final risk score: Combines base hazard, rainfall-driven runoff accumulation, and exposure into a 0-100 score.
+---
 
-**UI/UX Features**
-- UI slider: Changing rainfall from 50 to 250mm loads a different precomputed GeoJSON file from data/scenarios.
-- Click inspector: Reads the selected cell’s GeoJSON properties directly: risk, runoff, elevation, TWI, water proximity, drain distance, road features, etc.
+# Overview
+
+The simulator divides Bangalore into 224 spatial grid cells and computes a flood-risk score for each cell under multiple rainfall scenarios ranging from 50mm to 250mm.
+
+The goal is not to predict exact flood extents, but to create an interpretable urban flood-risk approximation using openly available geospatial and infrastructure datasets.
+
+---
+
+# What Is Being Visualised
+
+Each map cell contains multiple environmental and urban-risk features that contribute to a final flood-risk score.
+
+The frontend visualises:
+- Flood risk severity across Bangalore
+- Rainfall scenario changes
+- Hydrological and urban vulnerability indicators
+- Cell-level feature inspection through an interactive map UI
+
+# Data Sources
+
+## Elevation Data
+Each grid cell receives a real elevation sample from the Open-Meteo Elevation API, backed by:
+
+- Copernicus DEM GLO-90
+
+Elevation is used to estimate:
+- terrain slope
+- local depressions
+- runoff accumulation likelihood
+
+---
+
+## OpenStreetMap (OSM) Features
+
+### Water Features
+Fetched using the Overpass API:
+- lakes
+- streams
+- canals
+- waterways
+- drainage channels
+
+These contribute to:
+- water proximity scoring
+- drainage accessibility estimation
+
+---
+
+### Road Features
+OSM road density is used as a proxy for:
+- urbanization
+- impervious surfaces
+- exposure intensity
+
+Higher road density generally increases runoff and reduces infiltration.
+
+---
+
+# Risk Components
+
+## 1. TWI-Like Wetness Score
+
+A simplified Topographic Wetness Index approximation based on:
+- relative elevation
+- nearby lower-elevation cells
+- terrain flatness
+
+This is currently a lightweight approximation and not a full raster-derived hydrological TWI implementation.
+
+---
+
+## 2. Water Proximity Score
+
+Cells closer to:
+- lakes
+- drains
+- canals
+- waterways
+
+receive higher flood susceptibility scores.
+
+---
+
+## 3. Drain Inverse Score
+
+Flood risk increases when:
+- mapped drains are far away
+- drainage access is poor
+- road density is high
+
+This approximates reduced drainage effectiveness in dense urban areas.
+
+---
+
+## 4. Imperviousness Score
+
+Estimated primarily from:
+- OSM road density
+
+Higher imperviousness leads to:
+- lower infiltration
+- faster runoff accumulation
+- higher flood vulnerability
+
+---
+
+## 5. Runoff Score
+
+Runoff estimation uses the SCS Curve Number (SCS-CN) hydrological formula.
+
+Curve number values are estimated using:
+- imperviousness
+- water proximity
+- terrain context
+
+This approximates rainfall-to-runoff conversion under different rainfall intensities.
+
+---
+
+# Final Flood Risk Score
+
+The final 0–100 flood-risk score combines:
+- terrain hazard
+- runoff accumulation
+- water proximity
+- drainage limitations
+- urban exposure
+
+The system recalculates scores across multiple rainfall scenarios to visualise changing flood vulnerability patterns.
+
+---
+
+# Rainfall Scenarios
+
+The UI supports multiple precomputed rainfall simulations:
+- 50mm
+- 100mm
+- 150mm
+- 200mm
+- 250mm
+
+Each scenario loads a different GeoJSON layer from:
+
+```bash
+data/scenarios/
